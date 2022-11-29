@@ -9,20 +9,35 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let emailTextFieldView = UIView() // 뷰를 메모리에 올리는 활동.
+    lazy var emailTextFieldView : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.darkGray
+        // 모서리 둥글게 처리하는 방법.
+        view.layer.cornerRadius = 12
+        view.layer.masksToBounds = true
+        view.addSubview(emailTextFieldView)  // 그냥 ViewDidLoad에 올려놓으면 인식이 되지 않는다. 따라서 이를 해결할 수 있는 메서드는 addSubview라는 것.
+                                             // 스토리보드에서 끌어다 놓으면 되는 부분이 바로 위에 부분이다.
+        return view
+    }()  // 뷰를 메모리에 올리는 활동.
+    /// 위에 해당 방식은 클로저 방식이다. 이렇게 하면 코드를 정리 할 수 있다. 내부에서 정의한 것을 emailTextFieldView에 저장하는 것이다.
+    /// 이 방식으로 오토레이아웃을 설정할 수는 없다. 왜냐면 오토레이아웃 부분이 더 나중에 실행될 부분이기 때문이다.
+    /// 하지만 view를 올리는 것은 가능하다. (addSubview) 그것은 바로 lazy var로 선언을 하면 된다. lazy var는 미리 메모리에 올라가 있는 것이 아닌 실행이 될때 올라가기 때문에 가능하다.
+    /// 먼저 ViewController 가 생성이 될때 view가 먼저 생성이 되야한다. 그렇기 때문에 view가 생성되고 나중에 lazy var 부분인 emailTextFieldView가 생성이 되니까 이때는 addSubview를 생성할 수 있다. 이 부분은 정답은 아니며 선호도에 따라 차이가 난다. 
+    
+
+    
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+     
 
         makeUI()
     }
     
     func makeUI() { //
-        
-        emailTextFieldView.backgroundColor = UIColor.darkGray
-        view.addSubview(emailTextFieldView)  // 그냥 ViewDidLoad에 올려놓으면 인식이 되지 않는다. 따라서 이를 해결할 수 있는 메서드는 addSubview라는 것.
-                                             // 스토리보드에서 끌어다 놓으면 되는 부분이 바로 위에 부분이다.
         
         // 코드로 ui를 짠다면 무조건 이 설정을 처음에 해줘야 한다. 안그럼 오류난다.  
         emailTextFieldView.translatesAutoresizingMaskIntoConstraints = false
